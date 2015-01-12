@@ -5,6 +5,8 @@
 #include <numeric>
 #include <cmath>
 #include <functional> 
+#include <iomanip>
+#include <random>
 using namespace std;
 
 const int MAKS=1000;
@@ -22,14 +24,32 @@ double myaccumulator (double x, double y) {
 	double temp=x-y;
 	return pow(temp,2)/(x+y);
 }
+double round( double fValue )
+{
+	if(fValue<1.0 && fValue>0.0) floor( fValue);
+    return fValue < 0.0 ? ceil( fValue - 0.5 ): floor( fValue + 0.5 );
+}
 int main(void){
 	double init=0;
-	
 	vector<double> v(10,0); 
 	vector<double> v2(10,0);// inicjalizacja bufora: 10 liczb o wartoœci 0
 	srand (time(NULL));
 	
-	///// 5pkt
+	
+	/// zadanie przed æw
+    random_device rd; 
+    mt19937 engine(rd()); 
+	normal_distribution<> normal(5.0, 3.0); 
+	for (int i=0;i<MAKS; i++){
+		double temp=round(normal(engine));
+		//if(temp<10.0 && temp>=0.0 )
+			v[temp]++; 
+		temp=round(normal(engine));
+		//if(temp<10.0 && temp>=0.0 )
+			v2[temp]++;
+	}
+	///// 5pkt/*
+	/*
 	generate(v.begin(),v.end()-1,obiekt_funkcyjny(v.size()));
 	double temp;
 	for(vector<double>::iterator i=v.begin();i!=v.end();){
@@ -42,12 +62,12 @@ int main(void){
 		temp+=*i++;
 		if(i==v2.end()-1) *i=MAKS-temp;
 	}/// koniec 5 pkt, odkomentowac to co jest nizej, jezeli chesz miec na 3, a zakomentowac za 5 pkt
-	
-	/*for (int i=0;i<1000; i++){
-		v[rand() % 10]++; // wylosuj komórkê bufora i zwiêksz jej wartoœæ o 1
-		v2[rand() % 10]++;
+	/*
+	for (int i=0;i<MAKS; i++){
+		v[rand() % MAKS/100]++; // wylosuj komórkê bufora i zwiêksz jej wartoœæ o 1
+		v2[rand() % MAKS/100]++;
 	}*/
-
+	
 	for(vector<double>::iterator i=v.begin(),j=v2.begin();i!=v.end() && j!=v2.end();i++,j++)
 		cout<<*i<<' '<<*j<<endl;
 	
