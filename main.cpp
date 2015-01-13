@@ -5,17 +5,14 @@
 #include <numeric>
 #include <cmath>
 #include <functional> 
-#include <iomanip>
 #include <random>
 using namespace std;
-
 const int MAKS=1000;
 class obiekt_funkcyjny{
 int n;
 public:
 	obiekt_funkcyjny(int arg_n):n(arg_n){}
 	double operator()(){
-		//srand (time(NULL)); // siema nie rób tak, bo to pewnie sie wykonuje co 10000 razy w ci¹gu sekundy, wiec wszystkie wniki beda takie same
 		return MAKS/n+rand()%(MAKS/(n*n))-MAKS/(n*n*2);
 	}
 };
@@ -30,23 +27,25 @@ double round( double fValue )
     return fValue < 0.0 ? ceil( fValue - 0.5 ): floor( fValue + 0.5 );
 }
 int main(void){
-	double init=0;
 	vector<double> v(10,0); 
 	vector<double> v2(10,0);// inicjalizacja bufora: 10 liczb o wartoœci 0
 	srand (time(NULL));
-	
-	
+	string test;
 	/// zadanie przed æw
     random_device rd; 
     mt19937 engine(rd()); 
-	normal_distribution<> normal(5.0, 3.0); 
-	for (int i=0;i<MAKS; i++){
+	normal_distribution<> normal(4.5, 3.0); 
+	for (int i=0,j=0;i<MAKS || j<MAKS;){
 		double temp=round(normal(engine));
-		//if(temp<10.0 && temp>=0.0 )
+		if(temp<10.0 && temp>=0.0 && i<MAKS){
 			v[temp]++; 
+			i++;
+		}
 		temp=round(normal(engine));
-		//if(temp<10.0 && temp>=0.0 )
-			v2[temp]++;
+		if(temp<10.0 && temp>=0.0 && j<MAKS){
+			v2[temp]++; 
+			j++;
+		}
 	}
 	///// 5pkt/*
 	/*
@@ -67,10 +66,8 @@ int main(void){
 		v[rand() % MAKS/100]++; // wylosuj komórkê bufora i zwiêksz jej wartoœæ o 1
 		v2[rand() % MAKS/100]++;
 	}*/
-	
 	for(vector<double>::iterator i=v.begin(),j=v2.begin();i!=v.end() && j!=v2.end();i++,j++)
 		cout<<*i<<' '<<*j<<endl;
-	
-	cout<<">>"<<std::inner_product(v.begin(),v.end(),v2.begin(),init,plus<double>(),myaccumulator)<<"<<"<<'\n';
+	cout<<">>"<<std::inner_product(v.begin(),v.end(),v2.begin(),0.0,plus<double>(),myaccumulator)<<"<<"<<'\n';
 	return 0;
 }
